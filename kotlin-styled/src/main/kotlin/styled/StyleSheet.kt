@@ -16,30 +16,30 @@ open class StyleSheet(var name: String, val isStatic: Boolean = false) {
     fun css(vararg parents: RuleSet, builder: RuleSet) = CssHolder(this, *parents, builder)
 
     fun inject() {
-        if (!isLoaded && isStatic) {
-            isLoaded = true
-
-            // Unmangle the keys, e.g. "wrapper_r2j0kd$_0" -> "wrapper"
-            val keys = this.getOwnPropertyNames()
-                .filter { it.endsWith("\$_0") }
-                .filter { this.asDynamic()[it] is CssHolder }
-                .map { it to this.asDynamic()[it] as CssHolder }
-                .map { it.first.removeSuffix("\$_0") to it.second }
-                .map { it.first.substring(0, it.first.lastIndexOf('_')) to it.second }
-
-            val builder = CSSBuilder(allowClasses = false).apply {
-                keys.forEach {
-                    ".$name-${it.first}" {
-                        for (r in it.second.ruleSets) {
-                            r()
-                        }
-                    }
-                }
-            }
-
-            injectGlobal(builder.toString())
-        }
-    }
+//        if (!isLoaded && isStatic) {
+//            isLoaded = true
+//
+//            // Unmangle the keys, e.g. "wrapper_r2j0kd$_0" -> "wrapper"
+//            val keys = this.getOwnPropertyNames()
+//                .filter { it.endsWith("\$_0") }
+//                .filter { this.asDynamic()[it] is CssHolder }
+//                .map { it to this.asDynamic()[it] as CssHolder }
+//                .map { it.first.removeSuffix("\$_0") to it.second }
+//                .map { it.first.substring(0, it.first.lastIndexOf('_')) to it.second }
+//
+//            val builder = CSSBuilder(allowClasses = false).apply {
+//                keys.forEach {
+//                    ".$name-${it.first}" {
+//                        for (r in it.second.ruleSets) {
+//                            r()
+//                        }
+//                    }
+//                }
+//            }
+//
+//            injectGlobal(builder.toString())
+//        }
+//    }
 }
 
 class CssHolder(private val sheet: StyleSheet, internal vararg val ruleSets: RuleSet) {
